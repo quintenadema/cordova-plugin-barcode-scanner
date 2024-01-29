@@ -9,8 +9,19 @@ This plugin allows you to scan barcodes.
 
 ## Barcode types
 
+- UPC-A and UPC-E
+- EAN-8 and EAN-13
+- Code 39
+- Code 93
+- Code 128
+- ITF
+- Codabar
+- RSS-14 (all variants)
 - QR Code
-- Data matrix
+- Data Matrix
+- Maxicode
+- Aztec ('beta' quality)
+- PDF 417 ('beta' quality)
 
 ## Requirements
 

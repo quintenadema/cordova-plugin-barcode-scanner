@@ -76,9 +76,7 @@
 				<source url="https://github.com/CocoaPods/Specs.git"/>
 			</config>
 			<pods use_frameworks="true">
-<!-- 				<pod name="MapboxMaps" spec="10.16.0" />
-				<pod name="MapboxNavigation" spec="2.16.0" />
-				<pod name="MapboxSearch" spec="1.0.0-rc.7" /> -->
+				<pod name="ZXingObjC" spec="3.6.9" />
 			</pods>
 		</podspec>
 
