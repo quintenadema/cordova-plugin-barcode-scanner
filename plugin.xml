@@ -90,20 +90,12 @@
 		</config-file>
 
 		<config-file target="config.xml" parent="/*">
-<!-- 			<feature name="NativeMapboxMap">
-				<param name="ios-package" value="NativeMapboxMap" />
+			<feature name="BarcodeScanner">
+				<param name="ios-package" value="BarcodeScanner" />
 			</feature>
-			<feature name="NativeMapboxSearch">
-				<param name="ios-package" value="NativeMapboxSearch" />
-			</feature>
-			<feature name="NativeMapboxLocation">
-				<param name="ios-package" value="NativeMapboxLocation" />
-			</feature> -->
 		</config-file>
 
-<!-- 		<source-file src="src/ios/NativeMapboxMap.swift" />
-		<source-file src="src/ios/NativeMapboxSearch.swift" />
-		<source-file src="src/ios/NativeMapboxLocation.swift" /> -->
+		<source-file src="src/ios/BarcodeScanner.swift" />
 		
 		<source-file src="src/ios/barcodeScanner-Bridging-Header.h" />
 		
