@@ -51,6 +51,7 @@ class BarcodeScanner: CDVPlugin, ZXCaptureDelegate {
 		// Create a view controller for the modal
 		let modalViewController = UIViewController()
 		modalViewController.modalPresentationStyle = .pageSheet
+		modalViewController.presentationController?.delegate = self
 		
 		// ZXing Capture setup
 		let capture = ZXCapture()
@@ -82,7 +83,9 @@ class BarcodeScanner: CDVPlugin, ZXCaptureDelegate {
 		// Create a transparent square
 		let squareSize = CGSize(width: 200, height: 200)
 		let squareOrigin = CGPoint(x: (overlayView.bounds.width - squareSize.width) / 2, y: (overlayView.bounds.height - squareSize.height) / 2)
-		let transparentSquare = CGRect(origin: squareOrigin, size: squareSize)
+		var transparentSquare = CGRect(origin: squareOrigin, size: squareSize)
+		
+		transparentSquare.origin.y -= (squareSize.height / 2)
 		
 		let maskLayer = CAShapeLayer()
 		let path = CGMutablePath()
@@ -94,16 +97,39 @@ class BarcodeScanner: CDVPlugin, ZXCaptureDelegate {
 		
 		// Present the modal
 		self.viewController.present(modalViewController, animated: true, completion: nil)
-		return sendPluginResult(true)
 	}
 	
+	// ZXing Delegate Method
 	func captureResult(_ capture: ZXCapture!, result: ZXResult!) {
 		if let result = result {
 			let scannedData = result.text
 			
-			sendPluginResult(true, data: scannedData)
+			// Stop capture and close modal
+			capture.hard_stop()
+			self.viewController.dismiss(animated: true, completion: nil)
 			
-			capture.stop()
+			sendPluginResult(true, data: scannedData)
+		} else {
+			// No barcode detected, stop capture, close modal, and send false result
+			capture.hard_stop()
+			self.viewController.dismiss(animated: true) {
+				self.sendPluginResult(false, data: "No barcode detected")
+			}
 		}
+	}
+	
+	func closeModal() {
+		self.zxingCapture?.hard_stop()
+		self.viewController.dismiss(animated: true) {
+			self.sendPluginResult(false, data: "No barcode detected")
+		}
+	}
+}
+
+@available(iOS 13.0, *)
+extension BarcodeScanner: UIAdaptivePresentationControllerDelegate {
+	func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+		// Called when the modal is dismissed
+		closeModal()
 	}
 }
