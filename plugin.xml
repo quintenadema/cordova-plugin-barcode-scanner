@@ -70,8 +70,6 @@
 	<license>MIT</license>
 	<keywords>barcode,native,cordova</keywords>
 
-	<hook type="before_plugin_install" src="hooks/update_podfile.js" />
-
 	<platform name="ios">
 		<podspec>
 			<config>
