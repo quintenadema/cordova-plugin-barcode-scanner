@@ -1,0 +1,164 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-update-nrf" version="0.1.0">
+	<name>Update NRF</name>
+
+	<engines>
+		<engine name="cordova" version=">=9.0.0"/>
+		<engine name="cordova-android" version=">=8.0.0" />
+		<engine name="cordova-ios" version=">=5.0.0" />
+	</engines>
+
+	<js-module src="www/nordicUpdate.js" name="NordicUpdate">
+		<clobbers target="window.NordicUpdate" />
+	</js-module>
+
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="NordicUpdate">
+				<param name="android-package" value="com.ademagroup.NordicUpdate" />
+			</feature>
+		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:name="com.ademagroup.NotificationActivity" />
+			<service android:name="com.ademagroup.DfuService" />
+		</config-file>
+
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+			<uses-permission android:name="android.permission.BLUETOOTH"/>
+		</config-file>
+
+		<framework src="no.nordicsemi.android:dfu:2.2.1"/>
+		<framework src="androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04"/>
+
+		<source-file src="src/android/NordicUpdate.java" target-dir="src/com/ademagroup" />
+		<source-file src="src/android/DfuService.java" target-dir="src/com/ademagroup"/>
+		<source-file src="src/android/NotificationActivity.java" target-dir="src/com/ademagroup"/>
+	</platform>
+	<platform name="ios">
+		<config-file target="config.xml" parent="/widget">
+			<feature name="NordicUpdate">
+				<param name="ios-package" value="NordicUpdate" onload="true" />
+			</feature>
+		</config-file>
+
+		<header-file src="src/ios/NordicUpdate-Bridging-Header.h" />
+		<source-file src="src/ios/NordicUpdate.swift" />
+
+		<podspec>
+			<config>
+				<source url="https://github.com/CocoaPods/Specs.git"/>
+			</config>
+			<pods use-frameworks="true">
+				<pod name="iOSDFULibrary" spec="4.13.0" />
+			</pods>
+		</podspec>
+
+		<dependency id="cordova-plugin-add-swift-support" />
+		<dependency id="cordova-plugin-file" />
+	</platform>
+</plugin>
+ -->
+
+
+
+ <?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-barcode-scanner" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+	<name>Barcode Scanner</name>
+	<description>Cordova plugin to integrate Barcode scanner on the native side</description>
+	<license>MIT</license>
+	<keywords>barcode,native,cordova</keywords>
+
+	<hook type="before_plugin_install" src="hooks/update_podfile.js" />
+
+	<platform name="ios">
+		<podspec>
+			<config>
+				<source url="https://github.com/CocoaPods/Specs.git"/>
+			</config>
+			<pods use_frameworks="true">
+<!-- 				<pod name="MapboxMaps" spec="10.16.0" />
+				<pod name="MapboxNavigation" spec="2.16.0" />
+				<pod name="MapboxSearch" spec="1.0.0-rc.7" /> -->
+			</pods>
+		</podspec>
+
+		<config-file target="*-Info.plist" parent="Bridging_Header">
+			<string>$(SRCROOT)/$(PRODUCT_NAME)/Plugins/cordova-plugin-barcode-scanner/barcodeScanner-Bridging-Header.h</string>
+		</config-file>
+		<config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+			<string>We need access to your camera to scan barcodes.</string>
+		</config-file>
+
+		<config-file target="config.xml" parent="/*">
+<!-- 			<feature name="NativeMapboxMap">
+				<param name="ios-package" value="NativeMapboxMap" />
+			</feature>
+			<feature name="NativeMapboxSearch">
+				<param name="ios-package" value="NativeMapboxSearch" />
+			</feature>
+			<feature name="NativeMapboxLocation">
+				<param name="ios-package" value="NativeMapboxLocation" />
+			</feature> -->
+		</config-file>
+
+<!-- 		<source-file src="src/ios/NativeMapboxMap.swift" />
+		<source-file src="src/ios/NativeMapboxSearch.swift" />
+		<source-file src="src/ios/NativeMapboxLocation.swift" /> -->
+		
+		<source-file src="src/ios/barcodeScanner-Bridging-Header.h" />
+		
+		<dependency id="cordova-plugin-add-swift-support"/>
+	</platform>
+
+	<platform name="android">
+		<preference name="kotlin_version" default="1.9.10"/>
+
+		<config-file target="config.xml" parent="/*">
+			<preference name="android-minSdkVersion" value="21"/>
+			<preference name="android-targetSdkVersion" value="33"/>
+		</config-file>
+
+
+		<!-- <framework src="src/android/frameworks/mapbox-android.gradle" custom="true" type="gradleReference"/> -->
+		<!-- <framework src="src/android/frameworks/build-extras.gradle" custom="true" type="gradleReference" /> -->
+
+
+		<config-file target="res/xml/config.xml" parent="/*">
+<!-- 			<feature name="NativeMapboxMap">
+				<param name="android-package" value="com.ademagroup.nativemapbox.NativeMapboxMap"/>
+			</feature>
+			<feature name="NativeMapboxSearch">
+				<param name="android-package" value="com.ademagroup.nativemapbox.NativeMapboxSearch"/>
+			</feature>
+			<feature name="NativeMapboxLocation">
+				<param name="android-package" value="com.ademagroup.nativemapbox.NativeMapboxLocation"/>
+			</feature> -->
+		</config-file>
+
+<!-- 		<source-file src="src/android/NativeMapboxMap.kt" target-dir="src/com/ademagroup/nativemapbox/" />
+		<source-file src="src/android/NativeMapboxSearch.kt" target-dir="src/com/ademagroup/nativemapbox/" />
+		<source-file src="src/android/NativeMapboxLocation.kt" target-dir="src/com/ademagroup/nativemapbox/" /> -->
+
+
+
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.CAMERA"/>
+
+			<uses-feature android:name="android.hardware.camera"/>
+		</config-file>
+
+		<dependency id="cordova-plugin-androidx-adapter"/>
+	</platform>
+
+
+
+	<js-module src="www/barcodeScanner.js" name="barcodeScanner">
+		<clobbers target="barcodeScanner" />
+	</js-module>
+
+	<engines>
+		<engine name="cordova" version=">=10.0.0" />
+	</engines>
+</plugin>
