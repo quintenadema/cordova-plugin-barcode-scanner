@@ -37,30 +37,59 @@ class BarcodeScanner: CDVPlugin, ZXCaptureDelegate {
 	}
 
 
-	@objc func scan(title: String, description: String, command: CDVInvokedUrlCommand) {
+	@objc func scan(_ command: CDVInvokedUrlCommand) {
 		self.currentCommand = command
 		
 		let modalViewController = UIViewController()
 		modalViewController.modalPresentationStyle = .pageSheet
 		modalViewController.presentationController?.delegate = self
 
+		guard let title = command.arguments[0] as? String else {
+			sendPluginResult(false, data: "Invalid title argument")
+			return
+		}
+		
+		guard let description = command.arguments[1] as? String else {
+			sendPluginResult(false, data: "Invalid description argument")
+			return
+		}
+		
 		let titleLabel = UILabel()
 		titleLabel.text = title
-		titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+		titleLabel.font = UIFont.systemFont(ofSize: 48, weight: .semibold)
 		titleLabel.textAlignment = .center
-		titleLabel.frame = CGRect(x: 0, y: 20, width: modalViewController.view.frame.width, height: 30)
+		titleLabel.frame = CGRect(x: 0, y: 40, width: modalViewController.view.frame.width, height: 48)
 
 		let descriptionLabel = UILabel()
 		descriptionLabel.text = description
 		descriptionLabel.font = UIFont.systemFont(ofSize: 16)
+		descriptionLabel.alpha = 0.7
 		descriptionLabel.textAlignment = .center
-		descriptionLabel.frame = CGRect(x: 20, y: 60, width: modalViewController.view.frame.width - 40, height: 50)
+		descriptionLabel.frame = CGRect(x: 20, y: 100, width: modalViewController.view.frame.width - 40, height: 16)
 
-		modalViewController.view.addSubview(titleLabel)
-		modalViewController.view.addSubview(descriptionLabel)
 
 		
 		let capture = ZXCapture()
+		
+		capture.hints = ZXDecodeHints.hints() as? ZXDecodeHints
+		capture.hints?.addPossibleFormat(kBarcodeFormatAztec)
+		capture.hints?.addPossibleFormat(kBarcodeFormatCodabar)
+		capture.hints?.addPossibleFormat(kBarcodeFormatCode39)
+		capture.hints?.addPossibleFormat(kBarcodeFormatCode93)
+		capture.hints?.addPossibleFormat(kBarcodeFormatCode128)
+		capture.hints?.addPossibleFormat(kBarcodeFormatDataMatrix)
+		capture.hints?.addPossibleFormat(kBarcodeFormatEan8)
+		capture.hints?.addPossibleFormat(kBarcodeFormatEan13)
+		capture.hints?.addPossibleFormat(kBarcodeFormatITF)
+		capture.hints?.addPossibleFormat(kBarcodeFormatMaxiCode)
+		capture.hints?.addPossibleFormat(kBarcodeFormatPDF417)
+		capture.hints?.addPossibleFormat(kBarcodeFormatQRCode)
+		capture.hints?.addPossibleFormat(kBarcodeFormatRSS14)
+		capture.hints?.addPossibleFormat(kBarcodeFormatRSSExpanded)
+		capture.hints?.addPossibleFormat(kBarcodeFormatUPCA)
+		capture.hints?.addPossibleFormat(kBarcodeFormatUPCE)
+		capture.hints?.addPossibleFormat(kBarcodeFormatUPCEANExtension)
+		
 
 		let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInUltraWideCamera, .builtInWideAngleCamera], mediaType: .video, position: .back)
 		if let videoCaptureDevice = videoDeviceDiscoverySession.devices.first {
@@ -78,8 +107,20 @@ class BarcodeScanner: CDVPlugin, ZXCaptureDelegate {
 		capture.start()
 		
 		let overlayView = UIView(frame: modalViewController.view.frame)
-		overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+		
+		let blurEffect = UIBlurEffect(style: .regular)
+		let blurEffectView = UIVisualEffectView(effect: blurEffect)
+		blurEffectView.frame = overlayView.bounds
+		blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+		blurEffectView.alpha = 0.7
+		
+		overlayView.addSubview(blurEffectView)
+		
+		
 		modalViewController.view.addSubview(overlayView)
+		
+		modalViewController.view.addSubview(titleLabel)
+		modalViewController.view.addSubview(descriptionLabel)
 		
 		let squareSize = CGSize(width: 200, height: 200)
 		let squareOrigin = CGPoint(x: (overlayView.bounds.width - squareSize.width) / 2,
