@@ -37,12 +37,28 @@ class BarcodeScanner: CDVPlugin, ZXCaptureDelegate {
 	}
 
 
-	@objc func scan(_ command: CDVInvokedUrlCommand) {
+	@objc func scan(title: String, description: String, command: CDVInvokedUrlCommand) {
 		self.currentCommand = command
 		
 		let modalViewController = UIViewController()
 		modalViewController.modalPresentationStyle = .pageSheet
 		modalViewController.presentationController?.delegate = self
+
+		let titleLabel = UILabel()
+		titleLabel.text = title
+		titleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+		titleLabel.textAlignment = .center
+		titleLabel.frame = CGRect(x: 0, y: 20, width: modalViewController.view.frame.width, height: 30)
+
+		let descriptionLabel = UILabel()
+		descriptionLabel.text = description
+		descriptionLabel.font = UIFont.systemFont(ofSize: 16)
+		descriptionLabel.textAlignment = .center
+		descriptionLabel.frame = CGRect(x: 20, y: 60, width: modalViewController.view.frame.width - 40, height: 50)
+
+		modalViewController.view.addSubview(titleLabel)
+		modalViewController.view.addSubview(descriptionLabel)
+
 		
 		let capture = ZXCapture()
 

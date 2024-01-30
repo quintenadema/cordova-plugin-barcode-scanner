@@ -41,9 +41,12 @@ The API is available as a global `barcodeScanner` object
 
 ### Scan
 
+To start the scanner, run the following command.
+You can enter the `Title` and `Description` to show in the sheet, or leave it empty if you so desire.
+
 ```
 try {
-	const result = await barcodeScanner.scan();
+	const result = await barcodeScanner.scan('Title', 'Description');
 	console.log("Got barcode result", result);
 } catch (error) {
 	console.log("Could not get barcode", error);
