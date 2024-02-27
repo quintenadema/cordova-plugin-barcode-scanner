@@ -29,7 +29,6 @@
 		</config-file>
 
 		<source-file src="src/ios/BarcodeScanner.swift" />
-		
 		<source-file src="src/ios/barcodeScanner-Bridging-Header.h" />
 		
 		<dependency id="cordova-plugin-add-swift-support"/>
